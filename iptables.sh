@@ -4,7 +4,7 @@
 UFW_Installed=$(apt list ufw --installed | grep ufw -c)
 
 #Désinstalle UFW si installé
-if [$UFW_Installed -eq 1]; then
+if [ $UFW_Installed -eq 1 ]; then
     echo "Désinstallation de UFW..."
     systemctl disable ufw
     apt autoremove ufw
