@@ -4,10 +4,10 @@
 UFW_Installed=$(apt list ufw --installed | grep ufw -c)
 
 #Désinstalle UFW si installé
-if [ $UFW_Installed -eq 1 ]; then
+if [ $UFW_Installed -ge 1 ]; then
     echo "Désinstallation de UFW..."
     systemctl disable ufw
-    apt autoremove ufw
+    apt autoremove ufw -y
     #Suppression des règles relatives à UFW dans iptables
     for ufw in `iptables -L |grep ufw|awk '{ print $2 }'`; do iptables -F $ufw; done
     for ufw in `iptables -L |grep ufw|awk '{ print $2 }'`; do iptables -X $ufw; done
@@ -46,3 +46,5 @@ iptables -A OUTPUT -p icmp -j ACCEPT
 iptables -A INPUT -p icmp -j LOG --log-prefix "ICMP_IN: " --log-level 7
 iptables -A INPUT -p icmp -j ACCEPT
 
+#Installation de Iptables-Persistent pour sauvegarder les règles
+apt install iptables-persistent -y
